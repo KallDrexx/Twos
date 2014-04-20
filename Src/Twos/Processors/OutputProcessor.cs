@@ -9,7 +9,7 @@ namespace Twos.Processors
 {
     public class OutputProcessor
     {
-        private const int TileDisplayWidth = 5;
+        private const int TileDisplayWidth = 7;
 
         public void DisplayGame(GameState state)
         {
@@ -25,12 +25,15 @@ namespace Twos.Processors
 
         private void DisplayBoard(int[,] board)
         {
+            const int distanceFromTop = 1;
+            const int distanceFromLeft = 2;
+
             for (int row = 0; row < board.GetLength(0); row++)
             {
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
-                    int positionX = (row * TileDisplayWidth);
-                    int positionY = column;
+                    int positionX = (row * TileDisplayWidth) + distanceFromLeft;
+                    int positionY = column + distanceFromTop;
 
                     DisplayTileValue(positionX, positionY, board[row, column]);
                 }
