@@ -16,6 +16,8 @@ namespace Twos
             var output = new OutputProcessor();
 
             output.DisplayGame(state);
+
+            Console.ReadLine();
         }
     }
 }

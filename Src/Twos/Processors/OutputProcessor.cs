@@ -20,6 +20,7 @@ namespace Twos.Processors
             
             DisplayBoard(state.Board);
             DisplayScore(state.Score);
+            DisplayLastActions(state.Actions);
         }
 
         private void DisplayBoard(int[,] board)
@@ -67,6 +68,45 @@ namespace Twos.Processors
 
             Console.SetCursorPosition(startX, startY);
             Console.Write(value);
+        }
+
+        private void DisplayLastActions(LinkedList<GameAction> actions)
+        {
+            const string displayLabel = "Actions";
+            const int displayedActionsCount = 5;
+            const int distanceFromBorder = 20;
+            const int rowStart = 1;
+
+            int row = rowStart;
+            int startColumn = Console.WindowWidth - displayLabel.Length - distanceFromBorder;
+            Console.SetCursorPosition(startColumn, row);
+            Console.Write(displayLabel);
+            row++;
+
+            Console.SetCursorPosition(startColumn, row);
+            for (int x = 0; x < displayLabel.Length; x++)
+                Console.Write("-");
+
+            row++;
+
+            if (actions.Any())
+            {
+                var action = actions.Last;
+                for (int x = 0; x < displayedActionsCount; x++)
+                {
+                    if (action == null)
+                        break;
+
+                    string text = action.Value.ToString();
+                    startColumn = Console.WindowWidth - text.Length - distanceFromBorder;
+                    Console.SetCursorPosition(startColumn, row);
+                    Console.Write(text);
+
+                    action = action.Previous;
+                    row++;
+                }
+            }
+
         }
 
         private int GetNumberOfDigits(int value)
