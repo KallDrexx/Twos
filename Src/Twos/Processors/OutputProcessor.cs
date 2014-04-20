@@ -19,6 +19,7 @@ namespace Twos.Processors
             Console.Clear();
             
             DisplayBoard(state.Board);
+            DisplayScore(state.Score);
         }
 
         private void DisplayBoard(int[,] board)
@@ -35,6 +36,30 @@ namespace Twos.Processors
             }
         }
 
+        private void DisplayScore(int score)
+        {
+            const string displayLabel = "Score:";
+            const int distanceFromBorder = 3;
+
+            int row = 1;
+            int startColumn = Console.WindowWidth - displayLabel.Length - distanceFromBorder;
+            Console.SetCursorPosition(startColumn, row);
+            Console.Write(displayLabel);
+            row++;
+
+            Console.SetCursorPosition(startColumn, row);
+            for (int x = 0; x < displayLabel.Length; x++)
+                Console.Write("-");
+
+            row++;
+
+            int scoreDigits = GetNumberOfDigits(score);
+            startColumn = Console.WindowWidth - distanceFromBorder - scoreDigits;
+
+            Console.SetCursorPosition(startColumn, row);
+            Console.Write(score);
+        }
+
         private void DisplayTileValue(int startX, int startY, int value)
         {
             int digitCount = GetNumberOfDigits(value);
@@ -49,6 +74,9 @@ namespace Twos.Processors
             int digits = 0;
             while ((value = value % 10) > 0)
                 digits++;
+
+            if (digits == 0)
+                digits = 1;
 
             return digits;
         }
