@@ -80,11 +80,31 @@ namespace Twos.Processors
 
         private void DisplayTileValue(int startX, int startY, int value)
         {
+            var colors = new Dictionary<int, ConsoleColor>()
+            {
+                {0, ConsoleColor.DarkGray},
+                {2, ConsoleColor.Cyan},
+                {4, ConsoleColor.DarkCyan},
+                {8, ConsoleColor.Blue},
+                {16, ConsoleColor.DarkBlue},
+                {32, ConsoleColor.Green},
+                {64, ConsoleColor.DarkGreen},
+                {128, ConsoleColor.Yellow},
+                {256, ConsoleColor.DarkYellow},
+                {512, ConsoleColor.Magenta},
+                {1024, ConsoleColor.DarkMagenta},
+                {2048, ConsoleColor.Red}
+            };
+
             int digitCount = GetNumberOfDigits(value);
             startX += (TileDisplayWidth - digitCount);
 
+            if (colors.ContainsKey(value))
+                Console.ForegroundColor = colors[value];
+
             Console.SetCursorPosition(startX, startY);
             Console.Write(value);
+            Console.ResetColor();
         }
 
         private void DisplayLastActions(LinkedList<GameAction> actions)
