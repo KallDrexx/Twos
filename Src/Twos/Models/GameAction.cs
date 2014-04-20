@@ -13,6 +13,7 @@ namespace Twos.Models
         Down,
         Left,
         Right,
-        Quit
+        Quit,
+        Undo
     }
 }

@@ -37,16 +37,31 @@ namespace Twos.Processors
 
         public void RunGameAction(GameState state, GameAction action)
         {
-            bool isQuitting = false;
-            state.Actions.AddLast(action);
             bool atLeastOneTileMoved = false;
+            state.Actions.AddLast(action);
+
+            var actionsTriggeringBoardStore = new List<GameAction>()
+            {
+                GameAction.Up,
+                GameAction.Right,
+                GameAction.Left,
+                GameAction.Down
+            };
+
+            if (actionsTriggeringBoardStore.Contains(action))
+                StoreCurrentBoard(state);
 
             switch (action)
             {
                 case GameAction.Quit:
                 {
                     state.Status = GameStatus.Quit;
-                    isQuitting = true;
+                    break;
+                }
+
+                case GameAction.Undo:
+                {
+                    LoadPreviousBoard(state);
                     break;
                 }
 
@@ -83,16 +98,22 @@ namespace Twos.Processors
                 }
             }
 
-            if (!isQuitting)
+            if (atLeastOneTileMoved)
             {
-                if (atLeastOneTileMoved)
-                    AddTileToBoard(state);
+                AddTileToBoard(state);
 
                 if (!AnyMovesPossible(state.Board))
                     state.Status = GameStatus.Lost;
 
                 if (HasWon(state.Board))
                     state.Status = GameStatus.Won;
+            }
+            else if (action != GameAction.Undo)
+            {
+                // Since we saved the current board, but the board
+                // hasn't changed, remove it
+                if (state.PreviousBoards.Any())
+                    state.PreviousBoards.Pop();
             }
         }
         
@@ -155,6 +176,8 @@ namespace Twos.Processors
                             board[row, col] = 0; // current tile is now empty
                             state.Score += (tileValue*2);
                             atLeastOneTileMoved = true;
+
+                            emptyColumn = col; // Merge opens up the current tile
                         }
                         else if (emptyColumn >= 0)
                         {
@@ -215,6 +238,21 @@ namespace Twos.Processors
                         return true;
 
             return false;
+        }
+
+        private void StoreCurrentBoard(GameState state)
+        {
+            var clonedBoard = (int[,])state.Board.Clone();
+            state.PreviousBoards.Push(clonedBoard);
+        }
+
+        private void LoadPreviousBoard(GameState state)
+        {
+            if (!state.PreviousBoards.Any())
+                return;
+
+            var previousBoard = state.PreviousBoards.Pop();
+            state.Board = previousBoard;
         }
     }
 }

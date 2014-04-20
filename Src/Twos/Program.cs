@@ -40,7 +40,8 @@ namespace Twos
                 {ConsoleKey.DownArrow, GameAction.Down},
                 {ConsoleKey.LeftArrow, GameAction.Left},
                 {ConsoleKey.RightArrow, GameAction.Right},
-                {ConsoleKey.Escape, GameAction.Quit}
+                {ConsoleKey.Escape, GameAction.Quit},
+                {ConsoleKey.Z, GameAction.Undo}
             };
 
             var key = Console.ReadKey().Key;
