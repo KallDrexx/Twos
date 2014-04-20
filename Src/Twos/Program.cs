@@ -12,23 +12,24 @@ namespace Twos
     {
         static void Main(string[] args)
         {
-            var state = new GameState();
             var output = new OutputProcessor();
+            var actionProcessor = new GameActionProcessor();
             LinkedListNode<GameAction> lastAction = null;
 
-            output.DisplayGame(state, 123456);
+            var state = actionProcessor.GenerateInitialBoard();
+            output.DisplayGame(state, actionProcessor.Seed);
+
             while (state.Status == GameStatus.InProgress)
             {
                 var action = GetActionFromKeyPress();
                 if (action != GameAction.None)
                 {
-                    if (lastAction == null)
-                        lastAction = state.Actions.AddFirst(action);
-                    else
-                        lastAction = state.Actions.AddAfter(lastAction, action);
+                    lastAction = lastAction == null 
+                        ? state.Actions.AddFirst(action) 
+                        : state.Actions.AddAfter(lastAction, action);
                 }
 
-                output.DisplayGame(state, 123456);
+                output.DisplayGame(state, actionProcessor.Seed);
             }
         }
 
