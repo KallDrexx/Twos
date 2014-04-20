@@ -12,8 +12,9 @@ namespace Twos.Processors
         private const int TileDisplayWidth = 7;
         private const int ActionsDistanceFromRight = 20;
         private const int ScoreDistanceFromRight = 3;
+        private const int SeedDistanceFromRight = 35;
 
-        public void DisplayGame(GameState state)
+        public void DisplayGame(GameState state, int seed)
         {
             if (state == null)
                 throw new ArgumentNullException("state");
@@ -23,6 +24,7 @@ namespace Twos.Processors
             DisplayBoard(state.Board);
             DisplayScore(state.Score);
             DisplayLastActions(state.Actions);
+            DisplaySeed(seed);
         }
 
         private void DisplayBoard(int[,] board)
@@ -44,7 +46,7 @@ namespace Twos.Processors
 
         private void DisplayScore(int score)
         {
-            const string displayLabel = "Score:";
+            const string displayLabel = "Score";
 
             int row = 1;
             int startColumn = Console.WindowWidth - displayLabel.Length - ScoreDistanceFromRight;
@@ -63,6 +65,29 @@ namespace Twos.Processors
 
             Console.SetCursorPosition(startColumn, row);
             Console.Write(score);
+        }
+
+        private void DisplaySeed(int seed)
+        {
+            const string displayLabel = "Seed";
+
+            int row = 1;
+            int startColumn = Console.WindowWidth - displayLabel.Length - SeedDistanceFromRight;
+            Console.SetCursorPosition(startColumn, row);
+            Console.Write(displayLabel);
+            row++;
+
+            Console.SetCursorPosition(startColumn, row);
+            for (int x = 0; x < displayLabel.Length; x++)
+                Console.Write("-");
+
+            row++;
+
+            int scoreDigits = GetNumberOfDigits(seed);
+            startColumn = Console.WindowWidth - SeedDistanceFromRight - scoreDigits;
+
+            Console.SetCursorPosition(startColumn, row);
+            Console.Write(seed);
         }
 
         private void DisplayTileValue(int startX, int startY, int value)
@@ -114,12 +139,9 @@ namespace Twos.Processors
 
         private int GetNumberOfDigits(int value)
         {
-            int digits = 0;
-            while ((value = value % 10) > 0)
+            int digits = 1;
+            while ((value = value / 10) > 0)
                 digits++;
-
-            if (digits == 0)
-                digits = 1;
 
             return digits;
         }
