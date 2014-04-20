@@ -162,7 +162,7 @@ namespace Twos.Processors
                             board[row, emptyColumn] = tileValue;
                             lastNonEmptyColumn = emptyColumn;
                             board[row, col] = 0;
-                            emptyColumn = col;
+                            emptyColumn = emptyColumn + 1;
                             atLeastOneTileMoved = true;
                         }
                         else

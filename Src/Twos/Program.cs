@@ -28,6 +28,8 @@ namespace Twos
 
                 output.DisplayGame(state, actionProcessor.Seed);
             }
+
+            Console.ReadLine();
         }
 
         private static GameAction GetActionFromKeyPress()
