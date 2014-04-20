@@ -42,7 +42,7 @@ namespace Twos.Processors
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
                     int positionX = (row * TileDisplayWidth) + distanceFromLeft;
-                    int positionY = column + distanceFromTop;
+                    int positionY = (column * 2) + distanceFromTop;
 
                     DisplayTileValue(positionX, positionY, board[row, column]);
                 }
