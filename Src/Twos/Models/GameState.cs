@@ -12,6 +12,7 @@ namespace Twos.Models
         private readonly LinkedList<GameAction> _actions = new LinkedList<GameAction>(); 
 
         public int Score { get; set; }
+        public GameStatus Status { get; set; }
         public LinkedList<GameAction> Actions { get { return _actions; } }
         public int[,] Board { get { return _board; } }
     }

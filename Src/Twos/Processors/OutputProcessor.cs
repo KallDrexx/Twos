@@ -10,9 +10,12 @@ namespace Twos.Processors
     public class OutputProcessor
     {
         private const int TileDisplayWidth = 7;
+        private const int BoardDistanceFromTop = 1;
+        private const int BoardDistanceFromLeft = 2;
         private const int ActionsDistanceFromRight = 20;
         private const int ScoreDistanceFromRight = 3;
         private const int SeedDistanceFromRight = 35;
+        private const int GameStatusDistanceFrmTop = 20;
 
         public OutputProcessor()
         {
@@ -30,19 +33,17 @@ namespace Twos.Processors
             DisplayScore(state.Score);
             DisplayLastActions(state.Actions);
             DisplaySeed(seed);
+            DisplayGameStatus(state);
         }
 
         private void DisplayBoard(int[,] board)
         {
-            const int distanceFromTop = 1;
-            const int distanceFromLeft = 2;
-
             for (int row = 0; row < board.GetLength(0); row++)
             {
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
-                    int positionX = (row * TileDisplayWidth) + distanceFromLeft;
-                    int positionY = (column * 2) + distanceFromTop;
+                    int positionX = (row * TileDisplayWidth) + BoardDistanceFromLeft;
+                    int positionY = (column * 2) + BoardDistanceFromTop;
 
                     DisplayTileValue(positionX, positionY, board[row, column]);
                 }
@@ -112,6 +113,36 @@ namespace Twos.Processors
                 }
             }
 
+        }
+
+        private void DisplayGameStatus(GameState state)
+        {
+            Console.SetCursorPosition(BoardDistanceFromLeft, GameStatusDistanceFrmTop);
+
+            switch (state.Status)
+            {
+                case GameStatus.InProgress:
+                {
+                    Console.Write("Use the arrow keys to move numbers around");
+                    break;
+                }
+
+                case GameStatus.Lost:
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("Game Over");
+                    Console.ResetColor();
+                    break;
+                }
+
+                case GameStatus.Won:
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("You won!");
+                    Console.ResetColor();
+                    break;
+                }
+            }
         }
 
         private int GetNumberOfDigits(int value)
