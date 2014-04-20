@@ -82,7 +82,7 @@ namespace Twos.Processors
         {
             var colors = new Dictionary<int, ConsoleColor>()
             {
-                {0, ConsoleColor.DarkGray},
+                {0, ConsoleColor.Black},
                 {2, ConsoleColor.Cyan},
                 {4, ConsoleColor.DarkCyan},
                 {8, ConsoleColor.Blue},
