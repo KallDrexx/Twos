@@ -39,6 +39,7 @@ namespace Twos.Processors
         {
             bool isQuitting = false;
             state.Actions.AddLast(action);
+            bool atLeastOneTileMoved = false;
 
             switch (action)
             {
@@ -53,14 +54,14 @@ namespace Twos.Processors
                 // sliding to the left, then rotate it back
                 case GameAction.Left:
                 {
-                    SlideTilesToLeft(state);
+                    atLeastOneTileMoved = SlideTilesToLeft(state);
                     break;
                 }
 
                 case GameAction.Up:
                 {
                     MatrixHelper.RotateNegative90Degrees(state.Board);
-                    SlideTilesToLeft(state);
+                    atLeastOneTileMoved = SlideTilesToLeft(state);
                     MatrixHelper.Rotate90Degrees(state.Board);
                     break;
                 }
@@ -68,7 +69,7 @@ namespace Twos.Processors
                 case GameAction.Right:
                 {
                     MatrixHelper.Rotate180Degrees(state.Board);
-                    SlideTilesToLeft(state);
+                    atLeastOneTileMoved = SlideTilesToLeft(state);
                     MatrixHelper.Rotate180Degrees(state.Board);
                     break;
                 }
@@ -76,12 +77,16 @@ namespace Twos.Processors
                 case GameAction.Down:
                 {
                     MatrixHelper.Rotate90Degrees(state.Board);
-                    SlideTilesToLeft(state);
+                    atLeastOneTileMoved = SlideTilesToLeft(state);
                     MatrixHelper.RotateNegative90Degrees(state.Board);
                     break;
                 }
             }
 
+            if (!isQuitting && atLeastOneTileMoved)
+            {
+                AddTileToBoard(state);
+            }
         }
         
         private void AddTileToBoard(GameState state)
@@ -106,9 +111,15 @@ namespace Twos.Processors
             }
         }
 
-        private void SlideTilesToLeft(GameState state)
+        /// <summary>
+        /// Slides all tiles to the left, performing any merges along the way
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns>false if no tiles were moved or merged, true if a move or merge occurred</returns>
+        private bool SlideTilesToLeft(GameState state)
         {
             var board = state.Board;
+            bool atLeastOneTileMoved = false;
 
             for (int row = 0; row < board.GetLength(0); row++)
             {
@@ -136,6 +147,7 @@ namespace Twos.Processors
                             board[row, lastNonEmptyColumn] = (tileValue*2);
                             board[row, col] = 0; // current tile is now empty
                             state.Score += (tileValue*2);
+                            atLeastOneTileMoved = true;
                         }
                         else if (emptyColumn >= 0)
                         {
@@ -144,6 +156,7 @@ namespace Twos.Processors
                             lastNonEmptyColumn = emptyColumn;
                             board[row, col] = 0;
                             emptyColumn = col;
+                            atLeastOneTileMoved = true;
                         }
                         else
                         {
@@ -152,6 +165,8 @@ namespace Twos.Processors
                     }
                 }
             }
+
+            return atLeastOneTileMoved;
         }
     }
 }
