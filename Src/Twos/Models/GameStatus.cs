@@ -10,6 +10,7 @@ namespace Twos.Models
     {
         InProgress,
         Lost,
-        Won
+        Won,
+        Quit
     }
 }

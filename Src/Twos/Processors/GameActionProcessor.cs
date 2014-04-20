@@ -34,6 +34,20 @@ namespace Twos.Processors
 
             return state;
         }
+
+        public void RunGameAction(GameState state, GameAction action)
+        {
+            state.Actions.AddLast(action);
+
+            switch (action)
+            {
+                case GameAction.Quit:
+                {
+                    state.Status = GameStatus.Quit;
+                    break;
+                }
+            }
+        }
         
         private void AddTileToBoard(GameState state)
         {

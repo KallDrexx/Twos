@@ -22,12 +22,7 @@ namespace Twos
             while (state.Status == GameStatus.InProgress)
             {
                 var action = GetActionFromKeyPress();
-                if (action != GameAction.None)
-                {
-                    lastAction = lastAction == null 
-                        ? state.Actions.AddFirst(action) 
-                        : state.Actions.AddAfter(lastAction, action);
-                }
+                actionProcessor.RunGameAction(state, action);
 
                 output.DisplayGame(state, actionProcessor.Seed);
             }

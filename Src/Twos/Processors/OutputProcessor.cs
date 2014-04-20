@@ -34,6 +34,8 @@ namespace Twos.Processors
             DisplayLastActions(state.Actions);
             DisplaySeed(seed);
             DisplayGameStatus(state);
+
+            Console.SetCursorPosition(0, GameStatusDistanceFrmTop + 2);
         }
 
         private void DisplayBoard(int[,] board)
@@ -140,6 +142,12 @@ namespace Twos.Processors
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("You won!");
                     Console.ResetColor();
+                    break;
+                }
+
+                case GameStatus.Quit:
+                {
+                    Console.Write("Goodbye!");
                     break;
                 }
             }
