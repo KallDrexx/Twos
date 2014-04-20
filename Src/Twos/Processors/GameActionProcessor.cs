@@ -170,7 +170,7 @@ namespace Twos.Processors
                             state.Score += (tileValue*2);
                             atLeastOneTileMoved = true;
 
-                            emptyColumn = col; // Merge opens up the current tile
+                            emptyColumn = lastNonEmptyColumn + 1;
                         }
                         else if (emptyColumn >= 0)
                         {
