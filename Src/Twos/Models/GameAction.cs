@@ -8,9 +8,11 @@ namespace Twos.Models
 {
     public enum GameAction
     {
+        None,
         Up,
         Down,
         Left,
-        Right
+        Right,
+        Quit
     }
 }
