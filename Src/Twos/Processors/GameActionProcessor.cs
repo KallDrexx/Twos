@@ -83,9 +83,13 @@ namespace Twos.Processors
                 }
             }
 
-            if (!isQuitting && atLeastOneTileMoved)
+            if (!isQuitting)
             {
-                AddTileToBoard(state);
+                if (atLeastOneTileMoved)
+                    AddTileToBoard(state);
+
+                if (!AnyMovesPossible(state.Board))
+                    state.Status = GameStatus.Lost;
             }
         }
         
@@ -167,6 +171,37 @@ namespace Twos.Processors
             }
 
             return atLeastOneTileMoved;
+        }
+
+        private bool AnyMovesPossible(int[,] board)
+        {
+            // A move is possible if there are any empty spaces
+            // or if there are any of the same values next to each other
+            for (int row = 0; row < board.GetLength(0); row++)
+            {
+                for (int col = 0; col < board.GetLength(1); col++)
+                {
+                    int tileValue = board[row, col];
+
+                    if (tileValue == 0)
+                        return true;
+
+                    if (row > 0 && board[row - 1, col] == tileValue)
+                        return true;
+
+                    if (row < board.GetLength(0) - 1 && board[row + 1, col] == tileValue)
+                        return true;
+
+                    if (col > 0 && board[row, col - 1] == tileValue)
+                        return true;
+
+                    if (col < board.GetLength(1) - 1 && board[row, col + 1] == tileValue)
+                        return true;
+                }
+            }
+
+            // No moves found
+            return false;
         }
     }
 }
