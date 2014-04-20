@@ -10,6 +10,8 @@ namespace Twos.Processors
     public class OutputProcessor
     {
         private const int TileDisplayWidth = 7;
+        private const int ActionsDistanceFromRight = 20;
+        private const int ScoreDistanceFromRight = 3;
 
         public void DisplayGame(GameState state)
         {
@@ -43,10 +45,9 @@ namespace Twos.Processors
         private void DisplayScore(int score)
         {
             const string displayLabel = "Score:";
-            const int distanceFromBorder = 3;
 
             int row = 1;
-            int startColumn = Console.WindowWidth - displayLabel.Length - distanceFromBorder;
+            int startColumn = Console.WindowWidth - displayLabel.Length - ScoreDistanceFromRight;
             Console.SetCursorPosition(startColumn, row);
             Console.Write(displayLabel);
             row++;
@@ -58,7 +59,7 @@ namespace Twos.Processors
             row++;
 
             int scoreDigits = GetNumberOfDigits(score);
-            startColumn = Console.WindowWidth - distanceFromBorder - scoreDigits;
+            startColumn = Console.WindowWidth - ScoreDistanceFromRight - scoreDigits;
 
             Console.SetCursorPosition(startColumn, row);
             Console.Write(score);
@@ -77,11 +78,10 @@ namespace Twos.Processors
         {
             const string displayLabel = "Actions";
             const int displayedActionsCount = 5;
-            const int distanceFromBorder = 20;
             const int rowStart = 1;
 
             int row = rowStart;
-            int startColumn = Console.WindowWidth - displayLabel.Length - distanceFromBorder;
+            int startColumn = Console.WindowWidth - displayLabel.Length - ActionsDistanceFromRight;
             Console.SetCursorPosition(startColumn, row);
             Console.Write(displayLabel);
             row++;
@@ -101,7 +101,7 @@ namespace Twos.Processors
                         break;
 
                     string text = action.Value.ToString();
-                    startColumn = Console.WindowWidth - text.Length - distanceFromBorder;
+                    startColumn = Console.WindowWidth - text.Length - ActionsDistanceFromRight;
                     Console.SetCursorPosition(startColumn, row);
                     Console.Write(text);
 
