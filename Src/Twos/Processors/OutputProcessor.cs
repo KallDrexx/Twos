@@ -14,6 +14,11 @@ namespace Twos.Processors
         private const int ScoreDistanceFromRight = 3;
         private const int SeedDistanceFromRight = 35;
 
+        public OutputProcessor()
+        {
+            Console.CursorVisible = false;
+        }
+
         public void DisplayGame(GameState state, int seed)
         {
             if (state == null)
@@ -48,22 +53,12 @@ namespace Twos.Processors
         {
             const string displayLabel = "Score";
 
-            int row = 1;
-            int startColumn = Console.WindowWidth - displayLabel.Length - ScoreDistanceFromRight;
-            Console.SetCursorPosition(startColumn, row);
-            Console.Write(displayLabel);
-            row++;
-
-            Console.SetCursorPosition(startColumn, row);
-            for (int x = 0; x < displayLabel.Length; x++)
-                Console.Write("-");
-
-            row++;
+            DisplayLabel(displayLabel, ScoreDistanceFromRight);
 
             int scoreDigits = GetNumberOfDigits(score);
-            startColumn = Console.WindowWidth - ScoreDistanceFromRight - scoreDigits;
+            int startColumn = Console.WindowWidth - ScoreDistanceFromRight - scoreDigits;
 
-            Console.SetCursorPosition(startColumn, row);
+            Console.SetCursorPosition(startColumn, 3);
             Console.Write(score);
         }
 
@@ -71,22 +66,12 @@ namespace Twos.Processors
         {
             const string displayLabel = "Seed";
 
-            int row = 1;
-            int startColumn = Console.WindowWidth - displayLabel.Length - SeedDistanceFromRight;
-            Console.SetCursorPosition(startColumn, row);
-            Console.Write(displayLabel);
-            row++;
-
-            Console.SetCursorPosition(startColumn, row);
-            for (int x = 0; x < displayLabel.Length; x++)
-                Console.Write("-");
-
-            row++;
+            DisplayLabel(displayLabel, SeedDistanceFromRight);
 
             int scoreDigits = GetNumberOfDigits(seed);
-            startColumn = Console.WindowWidth - SeedDistanceFromRight - scoreDigits;
+            int startColumn = Console.WindowWidth - SeedDistanceFromRight - scoreDigits;
 
-            Console.SetCursorPosition(startColumn, row);
+            Console.SetCursorPosition(startColumn, 3);
             Console.Write(seed);
         }
 
@@ -103,22 +88,14 @@ namespace Twos.Processors
         {
             const string displayLabel = "Actions";
             const int displayedActionsCount = 5;
-            const int rowStart = 1;
+            const int rowStart = 3;
 
-            int row = rowStart;
-            int startColumn = Console.WindowWidth - displayLabel.Length - ActionsDistanceFromRight;
-            Console.SetCursorPosition(startColumn, row);
-            Console.Write(displayLabel);
-            row++;
-
-            Console.SetCursorPosition(startColumn, row);
-            for (int x = 0; x < displayLabel.Length; x++)
-                Console.Write("-");
-
-            row++;
+            DisplayLabel(displayLabel, ActionsDistanceFromRight);
 
             if (actions.Any())
             {
+                int row = rowStart;
+
                 var action = actions.Last;
                 for (int x = 0; x < displayedActionsCount; x++)
                 {
@@ -126,7 +103,7 @@ namespace Twos.Processors
                         break;
 
                     string text = action.Value.ToString();
-                    startColumn = Console.WindowWidth - text.Length - ActionsDistanceFromRight;
+                    int startColumn = Console.WindowWidth - text.Length - ActionsDistanceFromRight;
                     Console.SetCursorPosition(startColumn, row);
                     Console.Write(text);
 
@@ -144,6 +121,19 @@ namespace Twos.Processors
                 digits++;
 
             return digits;
+        }
+
+        private static void DisplayLabel(string displayLabel, int distanceFromRight)
+        {
+            int row = 1;
+            int startColumn = Console.WindowWidth - displayLabel.Length - distanceFromRight;
+            Console.SetCursorPosition(startColumn, row);
+            Console.Write(displayLabel);
+            row++;
+
+            Console.SetCursorPosition(startColumn, row);
+            for (int x = 0; x < displayLabel.Length; x++)
+                Console.Write("-");
         }
     }
 }
