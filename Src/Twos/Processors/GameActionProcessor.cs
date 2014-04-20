@@ -108,13 +108,6 @@ namespace Twos.Processors
                 if (HasWon(state.Board))
                     state.Status = GameStatus.Won;
             }
-            else if (action != GameAction.Undo)
-            {
-                // Since we saved the current board, but the board
-                // hasn't changed, remove it
-                if (state.PreviousBoards.Any())
-                    state.PreviousBoards.Pop();
-            }
         }
         
         private void AddTileToBoard(GameState state)
