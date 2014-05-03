@@ -11,15 +11,24 @@ namespace Twos
 {
     class Program
     {
+        private const string LogOutputDirectory = @"C:\temp";
+        private const string LogExtension = ".twos";
+
         static void Main(string[] args)
         {
+            var lastLogFileName = GetLastCreatedLogFilename();
+            if (!string.IsNullOrWhiteSpace(lastLogFileName))
+            {
+                var loggedGame = ActionLogReader.ReadLog(lastLogFileName);
+            }
+
             var output = new OutputProcessor();
             var actionProcessor = new GameActionProcessor(123);
 
             var state = actionProcessor.GenerateInitialBoard();
             output.DisplayGame(state, actionProcessor.Seed);
 
-            var logFileName = Path.Combine(@"C:\temp", DateTime.Now.ToString("yyyyMMddhhmmss") + ".twos");
+            var logFileName = Path.Combine(LogOutputDirectory, DateTime.Now.ToString("yyyyMMddhhmmss") + LogExtension);
             using (var writer = new ActionLogWriter(logFileName, actionProcessor.Seed))
             {
                 while (state.Status == GameStatus.InProgress)
@@ -52,6 +61,14 @@ namespace Twos
             GameAction action;
             keyMap.TryGetValue(key, out action);
             return action;
+        }
+
+        private static string GetLastCreatedLogFilename()
+        {
+            return Directory.GetFiles(LogOutputDirectory, "*" + LogExtension)
+                            .OrderByDescending(x => x)
+                            .FirstOrDefault();
+
         }
     }
 }
