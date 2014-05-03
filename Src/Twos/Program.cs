@@ -13,9 +13,6 @@ namespace Twos
     {
         static void Main(string[] args)
         {
-            var test = new int[4,4] {{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}};
-            MatrixHelper.ReverseColumns(test); 
-
             var output = new OutputProcessor();
             var actionProcessor = new GameActionProcessor(123);
 
