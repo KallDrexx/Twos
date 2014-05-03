@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,12 +22,17 @@ namespace Twos
             var state = actionProcessor.GenerateInitialBoard();
             output.DisplayGame(state, actionProcessor.Seed);
 
-            while (state.Status == GameStatus.InProgress)
+            var logFileName = Path.Combine(@"C:\temp", DateTime.Now.ToString("yyyyMMddhhmmss") + ".twos");
+            using (var writer = new ActionLogWriter(logFileName, actionProcessor.Seed))
             {
-                var action = GetActionFromKeyPress();
-                actionProcessor.RunGameAction(state, action);
+                while (state.Status == GameStatus.InProgress)
+                {
+                    var action = GetActionFromKeyPress();
+                    actionProcessor.RunGameAction(state, action);
 
-                output.DisplayGame(state, actionProcessor.Seed);
+                    output.DisplayGame(state, actionProcessor.Seed);
+                    writer.LogAction(action);
+                }
             }
 
             Console.ReadLine();

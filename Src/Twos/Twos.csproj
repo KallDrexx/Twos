@@ -46,6 +46,7 @@
     <Compile Include="Models\GameAction.cs" />
     <Compile Include="Models\GameState.cs" />
     <Compile Include="Models\GameStatus.cs" />
+    <Compile Include="Processors\ActionLogWriter.cs" />
     <Compile Include="Processors\GameActionProcessor.cs" />
     <Compile Include="Processors\OutputProcessor.cs" />
     <Compile Include="Program.cs" />
