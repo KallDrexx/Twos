@@ -30,7 +30,7 @@ What would you like to do?
                 {
                     case 1:
                     {
-                        return null; // No menu to proceed to, so start the game
+                        return new PlayMenu();
                     }
 
                     case 2:
