@@ -22,7 +22,7 @@ namespace Twos
             var state = actionProcessor.GenerateInitialBoard();
             output.DisplayGame(state, actionProcessor.Seed);
 
-            var logFileName = Path.Combine(parameters.LogOutputDirectory, DateTime.Now.ToString("yyyyMMddhhmmss") + parameters.LogOutputExtension);
+            var logFileName = Path.Combine(GameSettings.LogOutputDirectory, DateTime.Now.ToString("yyyyMMddhhmmss") + GameSettings.LogExtension);
             using (var writer = new ActionLogWriter(logFileName, actionProcessor.Seed))
             {
                 while (state.Status == GameStatus.InProgress)

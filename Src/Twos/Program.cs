@@ -11,19 +11,11 @@ namespace Twos
 {
     class Program
     {
-        private const string LogOutputDirectory = @"C:\temp";
-        private const string LogExtension = ".twos";
-
         static void Main()
         {
-            var gameParameters = new GameRunnerParameters
-            {
-                LogOutputDirectory = LogOutputDirectory,
-                LogOutputExtension = LogExtension
-            };
+            var gameParameters = new GameRunnerParameters();
 
             GameRunner.RunGame(gameParameters);
-
             Console.ReadLine();
         }
     }
