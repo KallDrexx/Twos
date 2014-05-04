@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using Twos.Models;
 using Twos.Processors;
 
 namespace Twos.Controllers
 {
-    class GameExecutionController
+    static class GameExecutionController
     {
+        private const decimal SecondsBetweenComputerControlledActions = 0.5m;
+
         public static void RunGame(GameRunnerParameters parameters)
         {
             if (parameters == null)
@@ -19,18 +23,48 @@ namespace Twos.Controllers
             var state = actionProcessor.GenerateInitialBoard();
             output.DisplayGame(state, actionProcessor.Seed);
 
-            var logFileName = Path.Combine(GameSettings.LogOutputDirectory, DateTime.Now.ToString("yyyyMMddhhmmss") + GameSettings.LogExtension);
-            using (var writer = new ActionLogWriter(logFileName, actionProcessor.Seed))
-            {
-                while (state.Status == GameStatus.InProgress)
-                {
-                    var action = GetActionFromKeyPress();
-                    actionProcessor.RunGameAction(state, action);
+            bool isReplayingLoggedGame = parameters.ReplayActions.Any();
+            int replayActionIndex = 0;
 
-                    output.DisplayGame(state, actionProcessor.Seed);
-                    writer.LogAction(action);
+            var writer = isReplayingLoggedGame
+                             ? new ActionLogWriter(GetNewLogName(), actionProcessor.Seed)
+                             : null;
+
+            while (state.Status == GameStatus.InProgress)
+            {
+                GameAction action;
+
+                if (isReplayingLoggedGame)
+                {
+                    // Replaying logged game
+                    if (replayActionIndex >= parameters.ReplayActions.Length)
+                    {
+                        Console.WriteLine("Logged game ended without any end condition being met!");
+                        break;
+                    }
+
+                    action = parameters.ReplayActions[replayActionIndex];
+                    replayActionIndex++;
+
+                    Thread.Sleep((int)(SecondsBetweenComputerControlledActions * 1000));
                 }
+                else
+                {
+                    // Player is playing the game
+                    action = GetActionFromKeyPress();
+                }
+
+                actionProcessor.RunGameAction(state, action);
+
+                output.DisplayGame(state, actionProcessor.Seed);
+
+                if (writer != null)
+                    writer.LogAction(action);
             }
+
+            if (writer != null)
+                writer.Dispose();
+
         }
 
         private static GameAction GetActionFromKeyPress()
@@ -50,6 +84,11 @@ namespace Twos.Controllers
             GameAction action;
             keyMap.TryGetValue(key, out action);
             return action;
+        }
+
+        private static string GetNewLogName()
+        {
+            return Path.Combine(GameSettings.LogOutputDirectory, DateTime.Now.ToString("yyyyMMddhhmmss") + GameSettings.LogExtension);
         }
     }
 }

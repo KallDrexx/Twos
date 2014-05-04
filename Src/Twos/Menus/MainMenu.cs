@@ -17,9 +17,11 @@ namespace Twos.Menus
 
 What would you like to do?
 1) Play game
-2) Exit";
+2) Replay logged game
+3) Exit";
             }
         }
+
         public IMenu ProcessAnswer(GameRunnerParameters gameRunnerParameters, string answer)
         {
             int value;
@@ -34,6 +36,11 @@ What would you like to do?
                     }
 
                     case 2:
+                    {
+                        return new ReplayLoggedGameMenu();
+                    }
+
+                    case 3:
                     {
                         gameRunnerParameters.QuitWithoutPlaying = true;
                         return null;
