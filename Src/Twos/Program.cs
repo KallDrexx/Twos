@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Twos.Models;
-using Twos.Processors;
+using Twos.Controllers;
+using Twos.Menus;
 
 namespace Twos
 {
@@ -13,9 +8,13 @@ namespace Twos
     {
         static void Main()
         {
-            var gameParameters = new GameRunnerParameters();
+            var parameters = MenuDisplayController.DisplayMenu(new MainMenu());
+            if (!parameters.QuitWithoutPlaying)
+            {
+                GameExecutionController.RunGame(parameters);
+            }
 
-            GameRunner.RunGame(gameParameters);
+            Console.WriteLine("Press enter to exit");
             Console.ReadLine();
         }
     }

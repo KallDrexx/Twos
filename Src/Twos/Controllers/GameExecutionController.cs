@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Twos.Models;
 using Twos.Processors;
 
-namespace Twos
+namespace Twos.Controllers
 {
-    public static class GameRunner
+    class GameExecutionController
     {
         public static void RunGame(GameRunnerParameters parameters)
         {

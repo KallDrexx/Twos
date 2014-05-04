@@ -42,15 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameRunner.cs" />
+    <Compile Include="Controllers\GameExecutionController.cs" />
+    <Compile Include="Controllers\MenuDisplayController.cs" />
     <Compile Include="GameSettings.cs" />
     <Compile Include="MatrixHelper.cs" />
+    <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Models\Coordinate.cs" />
     <Compile Include="Models\GameAction.cs" />
     <Compile Include="Models\GameRunnerParameters.cs" />
     <Compile Include="Models\GameState.cs" />
     <Compile Include="Models\GameStatus.cs" />
     <Compile Include="Models\LoggedGame.cs" />
+    <Compile Include="Models\IMenu.cs" />
     <Compile Include="Processors\ActionLogReader.cs" />
     <Compile Include="Processors\ActionLogWriter.cs" />
     <Compile Include="Processors\GameActionProcessor.cs" />
