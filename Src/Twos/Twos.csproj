@@ -56,6 +56,7 @@
     <Compile Include="Models\GameStatus.cs" />
     <Compile Include="Models\LoggedGame.cs" />
     <Compile Include="Models\IMenu.cs" />
+    <Compile Include="Models\MoveStatistics.cs" />
     <Compile Include="Processors\ActionLogReader.cs" />
     <Compile Include="Processors\ActionLogWriter.cs" />
     <Compile Include="Processors\GameActionProcessor.cs" />

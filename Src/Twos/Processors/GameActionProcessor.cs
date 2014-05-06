@@ -37,7 +37,7 @@ namespace Twos.Processors
 
         public void RunGameAction(GameState state, GameAction action)
         {
-            bool atLeastOneTileMoved = false;
+            MoveStatistics statistics = null;
             state.Actions.AddLast(action);
 
             var actionsTriggeringBoardStore = new List<GameAction>()
@@ -69,14 +69,14 @@ namespace Twos.Processors
                 // sliding to the left, then rotate it back
                 case GameAction.Left:
                 {
-                    atLeastOneTileMoved = SlideTilesToLeft(state);
+                    statistics = SlideTilesToLeft(state.Board);
                     break;
                 }
 
                 case GameAction.Up:
                 {
                     MatrixHelper.RotateNegative90Degrees(state.Board);
-                    atLeastOneTileMoved = SlideTilesToLeft(state);
+                    statistics = SlideTilesToLeft(state.Board);
                     MatrixHelper.Rotate90Degrees(state.Board);
                     break;
                 }
@@ -84,7 +84,7 @@ namespace Twos.Processors
                 case GameAction.Right:
                 {
                     MatrixHelper.Rotate180Degrees(state.Board);
-                    atLeastOneTileMoved = SlideTilesToLeft(state);
+                    statistics = SlideTilesToLeft(state.Board);
                     MatrixHelper.Rotate180Degrees(state.Board);
                     break;
                 }
@@ -92,13 +92,13 @@ namespace Twos.Processors
                 case GameAction.Down:
                 {
                     MatrixHelper.Rotate90Degrees(state.Board);
-                    atLeastOneTileMoved = SlideTilesToLeft(state);
+                    statistics = SlideTilesToLeft(state.Board);
                     MatrixHelper.RotateNegative90Degrees(state.Board);
                     break;
                 }
             }
 
-            if (atLeastOneTileMoved)
+            if (statistics != null && statistics.MoveOccurred)
             {
                 AddTileToBoard(state);
 
@@ -107,6 +107,11 @@ namespace Twos.Processors
 
                 if (HasWon(state.Board))
                     state.Status = GameStatus.Won;
+
+                foreach (var mergeResult in statistics.MergeResults)
+                {
+                    state.Score += mergeResult;
+                }
             }
         }
         
@@ -135,12 +140,9 @@ namespace Twos.Processors
         /// <summary>
         /// Slides all tiles to the left, performing any merges along the way
         /// </summary>
-        /// <param name="state"></param>
-        /// <returns>false if no tiles were moved or merged, true if a move or merge occurred</returns>
-        private bool SlideTilesToLeft(GameState state)
+        private MoveStatistics SlideTilesToLeft(int[,] board)
         {
-            var board = state.Board;
-            bool atLeastOneTileMoved = false;
+            var statistics = new MoveStatistics();
 
             for (int row = 0; row < board.GetLength(0); row++)
             {
@@ -164,11 +166,14 @@ namespace Twos.Processors
                         // check if they can be merged
                         if (lastNonEmptyColumn >= 0 && board[row, lastNonEmptyColumn] == tileValue)
                         {
+                            var mergeResultingValue = tileValue * 2;
+
                             // Merge
-                            board[row, lastNonEmptyColumn] = (tileValue*2);
+                            board[row, lastNonEmptyColumn] = mergeResultingValue;
                             board[row, col] = 0; // current tile is now empty
-                            state.Score += (tileValue*2);
-                            atLeastOneTileMoved = true;
+
+                            statistics.MergeResults.Add(mergeResultingValue);
+                            statistics.MoveOccurred = true;
 
                             emptyColumn = lastNonEmptyColumn + 1;
                         }
@@ -179,7 +184,8 @@ namespace Twos.Processors
                             lastNonEmptyColumn = emptyColumn;
                             board[row, col] = 0;
                             emptyColumn = emptyColumn + 1;
-                            atLeastOneTileMoved = true;
+
+                            statistics.MoveOccurred = true;
                         }
                         else
                         {
@@ -189,7 +195,7 @@ namespace Twos.Processors
                 }
             }
 
-            return atLeastOneTileMoved;
+            return statistics;
         }
 
         private bool AnyMovesPossible(int[,] board)
