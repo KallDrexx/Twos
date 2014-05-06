@@ -27,8 +27,8 @@ namespace Twos.Controllers
             int replayActionIndex = 0;
 
             var writer = isReplayingLoggedGame
-                             ? new ActionLogWriter(GetNewLogName(), actionProcessor.Seed)
-                             : null;
+                             ? null
+                             : new ActionLogWriter(GetNewLogName(), actionProcessor.Seed);
 
             while (state.Status == GameStatus.InProgress)
             {
@@ -59,11 +59,15 @@ namespace Twos.Controllers
                 output.DisplayGame(state, actionProcessor.Seed);
 
                 if (writer != null)
+                {
                     writer.LogAction(action);
+                }
             }
 
             if (writer != null)
+            {
                 writer.Dispose();
+            }
 
         }
 
